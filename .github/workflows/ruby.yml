@@ -7,6 +7,38 @@
 name: Publish Docker image
 on: [pull_request]
 jobs:
+  tests:
+    name: Unit Testing
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.1.9
+      - name: Ruby gem cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install gems
+        run: |
+          cd /home/runner/work/notejam/notejam/rubyonrails/notejam
+          bundle update rdoc
+          bundle install
+      - name: Setup Node
+        uses: actions/setup-node@v1
+      - name: Setup test database
+        run: |
+          cd /home/runner/work/notejam/notejam/rubyonrails/notejam
+          rake db:migrate
+      - name: Run tests
+        run: |
+          cd /home/runner/work/notejam/notejam/rubyonrails/notejam
+          rake test
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -18,5 +50,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: my-docker-hub-namespace/my-docker-hub-repository
+          repository: hoanghh/notejam
           tag_with_ref: true
