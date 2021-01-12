@@ -26,6 +26,7 @@ jobs:
             ${{ runner.os }}-gems-
       - name: Install gems
         run: |
+          cd /home/runner/work/notejam/notejam/rubyonrails/notejam
           bundle install
       - name: Setup Node
         uses: actions/setup-node@v1
