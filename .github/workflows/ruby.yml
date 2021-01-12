@@ -27,7 +27,7 @@ jobs:
       - name: Install gems
         run: |
           cd /home/runner/work/notejam/notejam/rubyonrails/notejam
-          bundle install
+          bundle install --full-index
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
