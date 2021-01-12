@@ -22,6 +22,6 @@ jobs:
         key: ${{ secrets.CICD_SSH_KEY }}
         #port: ${{ secrets.PORT }}
         script: |
+          rm -r /home/cloud_user/notejam-ops
           git clone --branch master https://github.com/hohuyhoangbk/notejam-ops.git
-          ls /home/cloud_user
-          helm install notejam ./notejam-ops --set service.type=NodePort
+          helm upgrade notejam ./notejam-ops --set service.type=NodePort
