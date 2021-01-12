@@ -1,4 +1,4 @@
-FROM ruby:2.1.5
+FROM ruby:2.1.9
 RUN apt-get update && apt-get install -y nodejs
 ENV APP_HOME /notejam
 RUN mkdir -p $APP_HOME
