@@ -22,7 +22,6 @@ jobs:
         key: ${{ secrets.CICD_SSH_KEY }}
         #port: ${{ secrets.PORT }}
         script: |
-          mkdir /home/cloud_user/notejam
-          cd /home/cloud_user/notejam
-          git clone https://github.com/hohuyhoangbk/notejam-ops.git
-          ls /home/cloud_user/notejam
+          
+          git clone --branch master https://github.com/hohuyhoangbk/notejam-ops.git
+          ls /home/cloud_user/notejam-ops
