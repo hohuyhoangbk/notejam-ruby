@@ -4,13 +4,16 @@
 # documentation.
 # This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-name: Publish Docker image
+name: CI/CD
+
 on: [pull_request]
+
 jobs:
   tests:
-    name: Unit Testing
+    name: Notejam workflow
     runs-on: ubuntu-18.04
     steps:
+# Unit Testing
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup Ruby
@@ -39,10 +42,8 @@ jobs:
         run: |
           cd /home/runner/work/notejam/notejam/rubyonrails/notejam
           rake test
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    steps:
+
+# Build and push image to docker hub
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Push to Docker Hub
@@ -52,3 +53,19 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: hoanghh/notejam
           tag_with_ref: true
+
+# Deploy to minikube server
+      - name: Execute ssh command via using private key
+        uses: appleboy/ssh-action@master
+        with:
+          #host: ${{ secrets.REMOTE_HOST }}
+          host: 14c2a4b81d1c.mylabserver.com
+          username: cloud_user   
+          #username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.CICD_SSH_KEY }}
+          #port: ${{ secrets.PORT }}
+          script: |
+            rm -r /home/cloud_user/notejam-ops
+            git clone --branch master https://github.com/hohuyhoangbk/notejam-ops.git
+            cp notejam-ops/nginx/default /etc/nginx/sites-available/
+            helm upgrade notejam ./notejam-ops --set service.type=NodePort
