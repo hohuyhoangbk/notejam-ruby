@@ -67,5 +67,5 @@ jobs:
           script: |
             rm -r /home/cloud_user/notejam-ops
             git clone --branch master https://github.com/hohuyhoangbk/notejam-ops.git
-            sudo cp notejam-ops/nginx/default /etc/nginx/sites-available/
+            cp notejam-ops/nginx/default /etc/nginx/sites-available/
             helm upgrade notejam ./notejam-ops --set service.type=NodePort
