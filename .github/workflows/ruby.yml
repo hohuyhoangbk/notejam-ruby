@@ -52,14 +52,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: hoanghh/notejam
-          tag_with_ref: true
+          tags: latest
 
 # Deploy to minikube server
       - name: Execute ssh command via using private key
         uses: appleboy/ssh-action@master
         with:
           #host: ${{ secrets.REMOTE_HOST }}
-          host: 14c2a4b81d1c.mylabserver.com
+          host: 5daa09e5d31c.mylabserver.com
           username: cloud_user   
           #username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.CICD_SSH_KEY }}
